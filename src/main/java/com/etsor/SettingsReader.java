@@ -31,6 +31,7 @@ public class SettingsReader {
 
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
+            
             if (event.isStartElement()) {
                 StartElement start = event.asStartElement();
                 String tagName = start.getName().getLocalPart();
@@ -39,6 +40,7 @@ public class SettingsReader {
                     settings.arrayName = start
                     .getAttributeByName(new QName("name"))
                     .getValue();
+                
                 } else if (tagName.equals("attributeName")) {
                     settings.attributeName = start
                     .getAttributeByName(new QName("value"))

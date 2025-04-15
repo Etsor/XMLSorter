@@ -35,10 +35,12 @@ public class XMLHandler {
 
         XMLEventReader reader = inputFactory
         .createXMLEventReader(new FileInputStream(inputFile));
+        
         XMLEventWriter writer = outputFactory
         .createXMLEventWriter(new FileOutputStream(outputFile));
         
         List<XMLEvent> buffer = new ArrayList<>();
+        
         boolean insideTargetArray = false;
 
         while(reader.hasNext()) {
@@ -47,8 +49,10 @@ public class XMLHandler {
             if (event.isStartElement() &&
             event.asStartElement().getName().getLocalPart()
             .equals(settings.arrayName)) {
+            
                 writer.add(event);
                 insideTargetArray = true;
+            
                 continue;
             }
 
@@ -56,7 +60,9 @@ public class XMLHandler {
                 if (event.isEndElement() &&
                 event.asEndElement().getName().getLocalPart()
                 .equals(settings.arrayName)) {
+                    
                     List<List<XMLEvent>> elements = extractElements(buffer);
+                    
                     elements.sort(Comparator.comparing(
                         eventList -> getAttributeValue(eventList.get(0),
                         settings.attributeName)));
@@ -71,9 +77,11 @@ public class XMLHandler {
                     writer.add(event);
 
                     insideTargetArray = false;
+                
                 } else {
                     buffer.add(event);
                 }
+            
             } else {
                 writer.add(event);
             }
