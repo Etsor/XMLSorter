@@ -60,7 +60,7 @@ public class XMLHandler {
         
         boolean insideTargetArray = false;
 
-        while(reader.hasNext()) {
+        while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
 
             if (event.isStartElement() &&
