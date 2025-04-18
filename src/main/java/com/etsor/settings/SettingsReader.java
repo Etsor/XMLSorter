@@ -1,4 +1,4 @@
-package com.etsor;
+package com.etsor.settings;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,13 +12,28 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import org.slf4j.LoggerFactory;
+
+import com.etsor.settings.model.Settings;
+
 import org.slf4j.Logger;
 
-
+/**
+ * Читает настройки из XML файла конфигурации и загружает их в объект класса 
+ * {@link com.etsor.settings.model.Settings}.
+ */
 public class SettingsReader {
     private static final Logger logger = LoggerFactory
     .getLogger(SettingsReader.class);
     
+    /**
+     * Читает настройки из XML файла конфигурации и загружает их в объект класса 
+     * {@link com.etsor.settings.model.Settings}.
+     * 
+     * @param file файл настроек
+     * @return объект настроек
+     * @throws FileNotFoundException если файл настроек не найден
+     * @throws XMLStreamException если возникла ошибка при обработке XML
+     */
     public static Settings readSettings(File file)
     throws FileNotFoundException, XMLStreamException {
 
@@ -37,14 +52,13 @@ public class SettingsReader {
                 String tagName = start.getName().getLocalPart();
 
                 if (tagName.equals("array")) {
-                    settings.arrayName = start
-                    .getAttributeByName(new QName("name"))
-                    .getValue();
-                
+                    settings.setArrayName(start.getAttributeByName(
+                        new QName("name")
+                    ).getValue());
                 } else if (tagName.equals("attributeName")) {
-                    settings.attributeName = start
-                    .getAttributeByName(new QName("value"))
-                    .getValue();
+                    settings.setAttributeName(start.getAttributeByName(
+                        new QName("value")
+                    ).getValue());
                 }
             }
         }
@@ -52,8 +66,8 @@ public class SettingsReader {
         
         logger.info(
             "Settings loaded: arrayName={}, attributeName={}",
-            settings.arrayName,
-            settings.attributeName);
+            settings.getArrayName(),
+            settings.getAttributeName());
         
             return settings;
     }

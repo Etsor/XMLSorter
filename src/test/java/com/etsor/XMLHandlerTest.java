@@ -7,6 +7,10 @@ import java.nio.file.Files;
 
 import org.junit.Test;
 
+import com.etsor.handlers.XMLHandler;
+import com.etsor.settings.SettingsReader;
+import com.etsor.settings.model.Settings;
+
 public class XMLHandlerTest {
 
     public XMLHandlerTest() {

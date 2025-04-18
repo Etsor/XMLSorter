@@ -1,4 +1,4 @@
-package com.etsor;
+package com.etsor.handlers;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,10 +21,27 @@ import javax.xml.stream.events.XMLEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.etsor.settings.model.Settings;
+
+
+/**
+ * Обработчик XML.
+ * Выполняет сортировку элементов в XML файле по заданному атрибуту.
+ */
 public class XMLHandler {
     private static final Logger logger = LoggerFactory
     .getLogger(XMLHandler.class);
     
+    
+    /**
+     * Обрабатывает XML файл, сортируя элементы по заданному атрибуту.
+     * 
+     * @param inputFile входной XML файл
+     * @param outputFile выходной XML файл
+     * @param settings заданные настройки
+     * @throws FileNotFoundException если входной файл не найден
+     * @throws XMLStreamException если возникла ошибка при обработке XML
+     */
     public static void processXML(File inputFile, File outputFile,
     Settings settings) throws FileNotFoundException, XMLStreamException {
 
@@ -48,7 +65,7 @@ public class XMLHandler {
 
             if (event.isStartElement() &&
             event.asStartElement().getName().getLocalPart()
-            .equals(settings.arrayName)) {
+            .equals(settings.getArrayName())) {
             
                 writer.add(event);
                 insideTargetArray = true;
@@ -59,13 +76,13 @@ public class XMLHandler {
             if (insideTargetArray) {
                 if (event.isEndElement() &&
                 event.asEndElement().getName().getLocalPart()
-                .equals(settings.arrayName)) {
+                .equals(settings.getArrayName())) {
                     
                     List<List<XMLEvent>> elements = extractElements(buffer);
                     
                     elements.sort(Comparator.comparing(
                         eventList -> getAttributeValue(eventList.get(0),
-                        settings.attributeName)));
+                        settings.getAttributeName())));
                     
                     for (List<XMLEvent> eventList : elements) {
                         for (XMLEvent ev : eventList) {
@@ -93,6 +110,12 @@ public class XMLHandler {
         logger.debug("Finished processing: {}", inputFile.getName());
     }
 
+    /**
+     * Извлекает XML элементы из буфера событий.
+     * 
+     * @param buffer список XML событий
+     * @return список элементов, где каждый элемент представлен списком событий
+     */
     private static List<List<XMLEvent>>
     extractElements(List<XMLEvent> buffer) {
         
@@ -123,7 +146,14 @@ public class XMLHandler {
         return result;
     }
 
-    public static String getAttributeValue(XMLEvent event,
+    /**
+     * Получает значение атрибута из XML события.
+     * 
+     * @param event XML событие
+     * @param attributeName имя атрибута
+     * @return значение атрибута/пустую строку
+     */
+    private static String getAttributeValue(XMLEvent event,
     String attributeName) {
         
         if (event.isStartElement()) {

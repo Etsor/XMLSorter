@@ -11,7 +11,13 @@ import javax.xml.stream.XMLStreamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.etsor.handlers.XMLHandler;
+import com.etsor.settings.SettingsReader;
+import com.etsor.settings.model.Settings;
 
+/**
+ * Производит многопоточную сортировку XML элементов.
+ */
 public class App {
     private static final Logger logger = LoggerFactory
     .getLogger(App.class);
@@ -21,7 +27,8 @@ public class App {
     InterruptedException {
         
         if (args.length < 2) {
-            logger.error("Usage: input1.xml input2.xml ... inputN.xml settings.xml");
+            logger.error("Usage: input1.xml input2.xml" +
+            "... inputN.xml settings.xml");
             return;
         }
 
@@ -39,9 +46,13 @@ public class App {
             executor.submit(() -> {
                 try {
                     XMLHandler.processXML(inputFile, outputFile, settings);
-                    logger.info("Processed: {}", inputFile.getName());
+                    logger.info(
+                        "Processed: {}",
+                        inputFile.getName());
                 } catch (Exception e) {
-                    logger.info("Error processing file: {}", inputFile.getName(), e);
+                    logger.info(
+                        "Error processing file: {}",
+                        inputFile.getName(), e);
                 };
             });
         }

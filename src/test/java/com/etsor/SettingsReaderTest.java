@@ -2,6 +2,9 @@ package com.etsor;
 
 import org.junit.Test;
 
+import com.etsor.settings.SettingsReader;
+import com.etsor.settings.model.Settings;
+
 import javax.xml.stream.XMLStreamException;
 
 import static org.junit.Assert.assertEquals;
@@ -21,7 +24,7 @@ public class SettingsReaderTest {
 
         Settings settings = SettingsReader.readSettings(testSettings);
 
-        assertEquals("BookStore", settings.arrayName);
-        assertEquals("Author", settings.attributeName);
+        assertEquals("BookStore", settings.getArrayName());
+        assertEquals("Author", settings.getAttributeName());
     }
 }
