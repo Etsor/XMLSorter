@@ -11,8 +11,6 @@ import javax.xml.stream.XMLStreamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// import com.etsor.config.AppConfig;
-
 import com.etsor.config.ErrorMessages;
 import com.etsor.handler.XMLHandler;
 import com.etsor.settings.SettingsReader;
